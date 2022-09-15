@@ -1,0 +1,7 @@
+<div class="line" *ngFor="let line of this.records">
+    <div class="char" *ngFor="let char of line">
+        <div [ngClass]="{wrong: char.code===0, bad: char.code===1, good: char.code===2}">{{char.letter}}</div>
+    </div>
+</div>
+
+{{this.records | json}}

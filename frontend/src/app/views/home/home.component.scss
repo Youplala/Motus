@@ -1,0 +1,48 @@
+.app-container {
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-rows: 1fr 5fr 1fr;
+    grid-template-areas: "header header header" "left content right" "footer footer footer";
+    height: calc(100vh - 20px);
+    width: 100%;
+}
+
+.header {
+    grid-area: header;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.footer {
+    grid-area: footer;
+    background-color: #f5f5f5;
+    border-top: 1px solid #e5e5e5;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.left {
+    grid-area: left;
+    background-color: #f5f5f5;
+    border-right: 1px solid #e5e5e5;
+    padding: 10px;
+}
+
+.right {
+    grid-area: right;
+    background-color: #f5f5f5;
+    border-left: 1px solid #e5e5e5;
+    padding: 10px;
+}
+
+.content {
+    grid-area: content;
+    background-color: #f5f5f5;
+    padding: 20px;
+}

@@ -1,0 +1,29 @@
+.line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.char {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1.5rem;
+    height: 50px;
+    width: 50px;
+}
+
+.good {
+    background-color: #4caf50;
+}
+
+.bad {
+    background-color: #f44336;
+}
+
+.wrong {
+    background-color: #000000;
+}
