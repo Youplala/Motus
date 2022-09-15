@@ -34,6 +34,24 @@ app.get("/firstHint", (req, res) => {
   res.status(200).json({firstHint: arr, hint: hint});
 });
 
+app.post("/guess", (req, res) => {
+  const word = getWord();
+  const guess = req.query.guess;
+  const arr = word.split("");
+  const guessArr = guess.split("");
+  const hint = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === guessArr[i]) {
+      hint.push(2);
+    } else if (arr.includes(guessArr[i])) {
+      hint.push(1);
+    } else {
+      hint.push(0);
+    }
+  }
+  res.status(200).json({guess: arr, hint: hint});
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
