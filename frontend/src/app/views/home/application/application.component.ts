@@ -23,6 +23,8 @@ export class ApplicationComponent implements OnInit {
       }
       this.records.push(out)
     });
+
+    this._request.post('guess', {guess: 'huiles'}).subscribe((data: any) => {console.log(data)})
   }
 
 }
