@@ -9,32 +9,29 @@ function syncReadFile(filename) {
   return arr;
 }
 
-function getRandom() {
-  return Math.random();
-}
-
-function checkDate() {
+function getSeedByDay() {
   const date = new Date();
-  const day = date.getDay();
-  if (day === 0 || day === 6) {
-    return true;
-  }
-  return false;
-}
-
-function saveSeed(seed) {
-  fsPromises.writeFile("seed.txt", seed);
-}
-
-function getSeed() {
-  const seed = syncReadFile("seed.txt");
+  const seed = date.getDate() / 31;
   return seed;
 }
 
-app.get("/word", (req, res) => {
-  const arr = syncReadFile("data/liste_francais_utf8.txt");
-  const word = arr[Math.floor(getRandom() * arr.length)];
-  res.status(200).json({mot: word, random: getRandom()});
+function getWord() {
+  const arr = syncReadFile("backend/data/liste_francais_utf8.txt");
+  const seed = getSeedByDay();
+  const word = arr[Math.floor(seed * arr.length)];
+  return word;
+}
+
+app.get("/firstHint", (req, res) => {
+  const word = getWord();
+  const firstHint = word[0];
+  const arr = [firstHint];
+  const hint = [2]
+  for (let i = 1; i < word.length; i++) {
+    arr.push("_");
+    hint.push(0);
+  }
+  res.status(200).json({firstHint: arr, hint: hint});
 });
 
 app.listen(port, () => {
