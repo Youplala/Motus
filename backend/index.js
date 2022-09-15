@@ -40,10 +40,11 @@ app.get("/firstHint", (req, res) => {
         arr.push("_");
         hint.push(0);
     }
+    console.log(word);
     res.status(200).json({ firstHint: arr, hint: hint });
 });
 
-app.post("/guess", (req, res) => {
+app.get("/guess", (req, res) => {
   const word = getWord();
   const guess = req.query.guess;
   const arr = word.split("");
@@ -58,7 +59,7 @@ app.post("/guess", (req, res) => {
       hint.push(0);
     }
   }
-  res.status(200).json({guess: arr, hint: hint});
+  res.status(200).json({guess: guessArr, hint: hint});
 });
 
 app.listen(port, () => {
