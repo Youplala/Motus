@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const { readFileSync, promises: fsPromises } = require("fs");
 const app = express();
 const port = 3000;
@@ -21,6 +22,8 @@ function getWord() {
   const word = arr[Math.floor(seed * arr.length)];
   return word;
 }
+
+app.use(cors());
 
 app.get("/firstHint", (req, res) => {
   const word = getWord();
