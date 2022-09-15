@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './views/home/home.component';
 import { ApplicationComponent } from './views/home/application/application.component';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +22,7 @@ import { ApplicationComponent } from './views/home/application/application.compo
         AppRoutingModule,
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     
   ],
   providers: [],
