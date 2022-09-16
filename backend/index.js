@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
+const os = require("os");
 const { readFileSync, promises: fsPromises } = require("fs");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Set up CORS
 app.use(cors());
@@ -56,6 +57,10 @@ app.get("/isWord", (req, res) => {
     res.status(200).json({ isWord: isWord });
 });
 
+app.get("/health", (req, res) => {
+    res.send("ok");
+});
+
 app.get("/guess", (req, res) => {
     const word = getWord();
     const guess = req.query.guess;
@@ -72,6 +77,10 @@ app.get("/guess", (req, res) => {
         }
     }
     res.status(200).json({ guess: guessArr, hint: hint });
+});
+
+app.get("/port", (req, res) => {
+    res.send("Motus app listening on " + os.hostname() + " port " + port);
 });
 
 app.listen(port, () => {
