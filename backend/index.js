@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 // Set up CORS
 app.use(cors());
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "localhost:*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -82,6 +82,15 @@ app.get("/guess", (req, res) => {
 app.get("/port", (req, res) => {
     res.send("Motus app listening on " + os.hostname() + " port " + port);
 });
+
+app.get("/path", (req, res) => {
+    res.send("Path Motus app listening on " + os.hostname() + " port " + port);
+});
+
+app.get("/anotherpath", (req, res) => {
+    res.send("AnotherPath Motus app listening on " + os.hostname() + " port " + port);
+});
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
