@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { map } from 'rxjs';
 import { RequestService } from 'src/app/services/request.service';
 
 @Component({
@@ -39,22 +40,40 @@ export class ApplicationComponent implements OnInit {
     if(word.length !== this.records[0].length) {
       console.log('Not the right length')
     } else {
+
       this.loading = true
-      this.formControl.setValue('')
-      this._request.get('guess?guess='+word).subscribe({next: (data: any) => {
-        const word: string[] = data.guess
-        const code: number[] = data.hint
-        const out: Letter[] = []
-        for (let i = 0; i < word.length; i++) {
-          out.push({letter: word[i], code: code[i]})
+
+      this._request.get('isWord?guess='+word).subscribe({
+        next: (data: any) => {
+          console.log(data)
+          if(data.isWord){
+            this._request.get('guess?guess='+word).subscribe({next: (data: any) => {
+              const word: string[] = data.guess
+              const code: number[] = data.hint
+              const out: Letter[] = []
+              for (let i = 0; i < word.length; i++) {
+                out.push({letter: word[i], code: code[i]})
+              }
+              this.records.push(out)
+              if(code.indexOf(0) === -1 && code.indexOf(1) === -1 ){
+                console.log('GG')
+              }
+              },
+            complete:() => {
+              this.loading = false
+              this.formControl.setValue('')
+            }
+            }
+            )
+          } else {
+            console.log('Does not exist')
+            this.loading = false
+          }
         }
-        this.records.push(out)
-        },
-      complete:() => {
-        this.loading = false
-      }
-      }
-      )
+      })
+
+      
+      
     }
   }
 
