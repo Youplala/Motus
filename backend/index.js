@@ -4,11 +4,13 @@ const { readFileSync, promises: fsPromises } = require("fs");
 const app = express();
 const port = 3000;
 
-function syncReadFile(filename) {
-    const contents = readFileSync(filename, "utf-8");
-    const arr = contents.split(/\r?\n/);
-    return arr;
-}
+// Set up CORS
+app.use(cors());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 function getSeedByDay() {
     const date = new Date();
@@ -16,20 +18,23 @@ function getSeedByDay() {
     return seed;
 }
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+function syncReadFile(filename) {
+    const contents = readFileSync(filename, "utf-8");
+    const arr = contents.split(/\r?\n/);
+    return arr;
+}
+
+function getWordList() {
+    const arr = syncReadFile("backend/data/liste_francais_utf8.txt");
+    return arr;
+}
 
 function getWord() {
-    const arr = syncReadFile("backend/data/liste_francais_utf8.txt");
+    const arr = getWordList();
     const seed = getSeedByDay();
     const word = arr[Math.floor(seed * arr.length)];
     return word;
 }
-
-app.use(cors());
 
 app.get("/firstHint", (req, res) => {
     const word = getWord();
@@ -42,6 +47,13 @@ app.get("/firstHint", (req, res) => {
     }
     console.log(word);
     res.status(200).json({ firstHint: arr, hint: hint });
+});
+
+app.get("/isWord", (req, res) => {
+    const guess = req.query.guess;
+    const wordList = getWordList();
+    const isWord = wordList.includes(guess);
+    res.status(200).json({ isWord: isWord });
 });
 
 app.get("/guess", (req, res) => {
