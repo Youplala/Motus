@@ -32,4 +32,24 @@ NocoDB est un service qui permet de visualiser la base de données.
 
 Postgres est la base de données utilisée par l'application.
 
-
+```{mermaid}
+sequenceDiagram
+    Frontend ->>+ Authentication: Credentials
+    Authentication -->>+ Frontend: Token
+    Frontend ->>+ Backend: firstHint
+    Backend -->>+ Frontend: Hint
+    loop For Each Try
+        Frontend ->>+ Backend: Try (Word)
+        Backend ->>+ NocoDB: Add Try to User
+        NocoDB ->>+ Postgres: Save Data
+        Postgres -->>+ NocoDB: Data Saved
+        NocoDB -->>+ Backend: Data Saved
+        Backend -->>+ Frontend: Hints
+    end
+    Frontend ->>+ Backend: Answer
+    Backend ->>+ NocoDB: Add Score to User
+    NocoDB ->>+ Postgres: Save Data
+    Postgres -->>+ NocoDB: Data Saved
+    NocoDB -->>+ Backend: Data Saved
+    Backend -->>+ Frontend: Congrats
+```
