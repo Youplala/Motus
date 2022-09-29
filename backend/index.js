@@ -29,7 +29,7 @@ function syncReadFile(filename) {
 }
 
 function getWordList() {
-    const arr = syncReadFile("backend/data/liste_francais_utf8.txt");
+    const arr = syncReadFile("data/liste_francais_utf8.txt");
     return arr;
 }
 
