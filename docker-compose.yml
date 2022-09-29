@@ -7,6 +7,10 @@ services:
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
@@ -16,6 +20,8 @@ services:
       interval: 10s
       timeout: 2s
       retries: 10
+    networks:
+      - mynetwork
 
   nocodb:
     depends_on:
@@ -29,25 +35,41 @@ services:
       - nc_data:/usr/app/data
     environment:
       NC_DB: "pg://root_db:5432?u=postgres&p=password&d=root_db"
+    networks:
+      - mynetwork
 
-  backend1:
-    image: youplala/motus-backend:latest
+  back1:
+    build: ./backend
+    container_name: back1
+    restart: always
+    networks:
+      - mynetwork
+
+
+  back2:
+    build: ./backend
+    container_name: "back2"
+    restart: always
+    networks:
+      - mynetwork
+
+  proxy:
+    build: ./proxy
+    container_name: "proxy"
     restart: always
     ports:
-      - "3001:3000"
+      - "80:80"
+    expose:
+      - "80"
+    networks:
+      - mynetwork
 
-  backend2:
-    image: youplala/motus-backend:latest
-    restart: always
-    ports:
-      - "3002:3000"
 
-  backend3:
-    image: youplala/motus-backend:latest
-    restart: always
-    ports:
-      - "3003:3000"
 
 volumes:
   db_data: {}
   nc_data: {}
+
+networks:
+  mynetwork:
+    driver: bridge
