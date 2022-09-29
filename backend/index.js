@@ -63,7 +63,7 @@ function getWord() {
   return word;
 }
 
-app.get("/firstHint", (req, res) => {
+app.get("/motus/firstHint", (req, res) => {
   const word = getWord();
   const firstHint = word[0];
   const arr = [firstHint];
@@ -76,18 +76,18 @@ app.get("/firstHint", (req, res) => {
   res.status(200).json({ firstHint: arr, hint: hint });
 });
 
-app.get("/isWord", (req, res) => {
+app.get("/motus/isWord", (req, res) => {
   const guess = req.query.guess;
   const wordList = getWordList();
   const isWord = wordList.includes(guess);
   res.status(200).json({ isWord: isWord });
 });
 
-app.get("/health", (req, res) => {
+app.get("/motus/health", (req, res) => {
   res.send("ok");
 });
 
-app.get("/guess", (req, res) => {
+app.get("/motus/guess", (req, res) => {
   const word = getWord();
   const guess = req.query.guess;
   const arr = word.split("");
@@ -105,34 +105,34 @@ app.get("/guess", (req, res) => {
   res.status(200).json({ guess: guessArr, hint: hint });
 });
 
-app.get("/port", (req, res) => {
+app.get("/motus/port", (req, res) => {
   res.send("Motus app listening on " + os.hostname() + " port " + port);
 });
 
-app.get("/path", (req, res) => {
+app.get("/motus/path", (req, res) => {
   res.send("Path Motus app listening on " + os.hostname() + " port " + port);
 });
 
-app.get("/anotherpath", (req, res) => {
+app.get("/motus/anotherpath", (req, res) => {
   res.send(
     "AnotherPath Motus app listening on " + os.hostname() + " port " + port
   );
 });
 
-app.get("/auth", (req, res) => {
-    // get username from post params
-    const username = req.query.username;
-    // get password from post params
-    const password = req.query.password;
-    console.log(req.query)
-    credentials = { 'username': username, 'password': password };
-    credentialsList = [credentials];
-    if (credentialsList.includes(credentials)) {
-        res.status(200).json({ auth: true });
-    } else {
-        res.status(200).json({ auth: false });
-    }
-})
+app.get("/motus/auth", (req, res) => {
+  // get username from post params
+  const username = req.query.username;
+  // get password from post params
+  const password = req.query.password;
+  console.log(req.query);
+  credentials = { username: username, password: password };
+  credentialsList = [credentials];
+  if (credentialsList.includes(credentials)) {
+    res.status(200).json({ auth: true });
+  } else {
+    res.status(200).json({ auth: false });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

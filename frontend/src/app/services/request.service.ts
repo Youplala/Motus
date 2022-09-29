@@ -13,12 +13,12 @@ constructor(
 
   public get(route: string, body?: any, token?: string): Observable<any> {
     const headers: HttpHeaders = new HttpHeaders()
-    return this._http.get('http://localhost:3000/'+route, body)
+    return this._http.get('http://localhost/motus/'+route, body)
   }
 
   public post(route: string, body?: any, token?: string): Observable<any> {
     const headers: HttpHeaders = new HttpHeaders()
-    return this._http.post('http://localhost:3000/'+route, body)
+    return this._http.post('http://localhost/motus/'+route, body)
   }
 
 }
