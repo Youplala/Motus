@@ -96,6 +96,21 @@ app.get("/anotherpath", (req, res) => {
     );
 });
 
+app.get("/auth", (req, res) => {
+    // get username from post params
+    const username = req.query.username;
+    // get password from post params
+    const password = req.query.password;
+    console.log(req.query)
+    credentials = { 'username': username, 'password': password };
+    credentialsList = [credentials];
+    if (credentialsList.includes(credentials)) {
+        res.status(200).json({ auth: true });
+    } else {
+        res.status(200).json({ auth: false });
+    }
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
