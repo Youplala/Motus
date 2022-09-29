@@ -1,7 +1,6 @@
-version: '2.1'
+version: "2.1"
 
 services:
-
   root_db:
     image: postgres
     restart: always
@@ -30,6 +29,8 @@ services:
     image: nocodb/nocodb:0.96.4
     ports:
       - "8080:8080"
+    expose:
+      - "8080"
     restart: always
     volumes:
       - nc_data:/usr/app/data
@@ -45,11 +46,20 @@ services:
     networks:
       - mynetwork
 
-
   back2:
     build: ./backend
     container_name: "back2"
     restart: always
+    networks:
+      - mynetwork
+
+  front:
+    build: ./frontend
+    container_name: "front"
+    ports:
+      - "4200:4200"
+    expose:
+      - "4200"
     networks:
       - mynetwork
 
@@ -63,8 +73,6 @@ services:
       - "80"
     networks:
       - mynetwork
-
-
 
 volumes:
   db_data: {}
