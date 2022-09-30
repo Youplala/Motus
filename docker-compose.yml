@@ -27,6 +27,7 @@ services:
       root_db:
         condition: service_healthy
     image: nocodb/nocodb:0.96.4
+    container_name: nocodb
     ports:
       - "8080:8080"
     expose:
