@@ -74,6 +74,17 @@ services:
     networks:
       - mynetwork
 
+  auth:
+    build: ./backend/database
+    container_name: "auth"
+    restart: always
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+    networks:
+      - mynetwork
+
 volumes:
   db_data: {}
   nc_data: {}
@@ -81,3 +92,4 @@ volumes:
 networks:
   mynetwork:
     driver: bridge
+    external: true

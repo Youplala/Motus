@@ -7,24 +7,25 @@ const port = process.env.PORT || 3000;
 
 var axios = require("axios").default;
 
-app.get("/", (req, res) => {
+app.get("/motus/test", (req, res) => {
+  console.log("test");
   var options = {
     method: "GET",
     url: "http://localhost:8080/api/v1/db/data/noco/p_74k29q6kw8rewf/Motus/views/Motus",
     params: { offset: "0", limit: "25", where: "" },
-    headers: {
-      "xc-auth":
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6bnVsbCwibGFzdG5hbWUiOm51bGwsImlkIjoidXNfN25iNjR1cWxyMHF0cnQiLCJyb2xlcyI6InVzZXIsc3VwZXIiLCJ0b2tlbl92ZXJzaW9uIjoiNGY3YzgwOGU1NTg2YzhhYWFkNTYwZjk3NDZlMDc4Y2U5OGE1ODYwNTU5YTE1MDE5MWEzYjczMzBhYzNjNTUzNTAyNDBlNjAzNWJmMjQxY2YiLCJpYXQiOjE2NjQ0NTE3NDIsImV4cCI6MTY2NDQ4Nzc0Mn0.EGq70oSQdPkG9FkmG_NkhuIEbN0qvYYC1Z4vllxrlMA",
-    },
+    // headers: {
+    //   "xc-auth":
+    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6bnVsbCwibGFzdG5hbWUiOm51bGwsImlkIjoidXNfN25iNjR1cWxyMHF0cnQiLCJyb2xlcyI6InVzZXIsc3VwZXIiLCJ0b2tlbl92ZXJzaW9uIjoiNGY3YzgwOGU1NTg2YzhhYWFkNTYwZjk3NDZlMDc4Y2U5OGE1ODYwNTU5YTE1MDE5MWEzYjczMzBhYzNjNTUzNTAyNDBlNjAzNWJmMjQxY2YiLCJpYXQiOjE2NjQ0NjU0NDksImV4cCI6MTY2NDUwMTQ0OX0.4NOv3DMZvrucbtwqAX-Xs3JDTpAhQopLRqd5ZbLd5ms",
+    // },
   };
 
   axios
     .request(options)
     .then(function (response) {
-      console.log(response.data);
+      res.json(response.data);
     })
     .catch(function (error) {
-      console.error(error);
+      res.json(error);
     });
 });
 
@@ -96,7 +97,7 @@ app.get("/motus/guess", (req, res) => {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] === guessArr[i]) {
       hint.push(2);
-    } else if (arr.includes(guessArr[i])) {
+    } else if (arr.includes(guessArr[i]) && hint) {
       hint.push(1);
     } else {
       hint.push(0);
