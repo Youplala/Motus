@@ -52,6 +52,7 @@ router.get("/firstHint", (req, res) => {
   fetch(auth)
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
       if (data.valid) {
         // Token is valid
         const { word, arr, hint } = computeFirstHint();
@@ -63,10 +64,23 @@ router.get("/firstHint", (req, res) => {
 });
 
 router.get("/isWord", (req, res) => {
-  const guess = req.query.guess;
-  const wordList = getWordList();
-  const isWord = wordList.includes(guess);
-  res.status(200).json({ isWord: isWord });
+  const token = req.query.token;
+  // Request to auth to check if token is valid
+  const auth = "http://localhost:3000/auth/checkToken?token=" + token;
+  fetch(auth)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.valid) {
+        const guess = req.query.guess;
+        const wordList = getWordList();
+        const isWord = wordList.includes(guess);
+        res.status(200).json({ isWord: isWord });
+        res.status(200).json({ guess: guessArr, hint: hint });
+      } else {
+        res.json({ error: "Invalid token" });
+      }
+    });
 });
 
 router.get("/health", (req, res) => {
@@ -74,21 +88,33 @@ router.get("/health", (req, res) => {
 });
 
 router.get("/guess", (req, res) => {
-  const word = getWord();
-  const guess = req.query.guess;
-  const arr = word.split("");
-  const guessArr = guess.split("");
-  const hint = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === guessArr[i]) {
-      hint.push(2);
-    } else if (arr.includes(guessArr[i]) && hint) {
-      hint.push(1);
-    } else {
-      hint.push(0);
-    }
-  }
-  res.status(200).json({ guess: guessArr, hint: hint });
+  const token = req.query.token;
+  // Request to auth to check if token is valid
+  const auth = "http://localhost:3000/auth/checkToken?token=" + token;
+  fetch(auth)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.valid) {
+        const word = getWord();
+        const guess = req.query.guess;
+        const arr = word.split("");
+        const guessArr = guess.split("");
+        const hint = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i] === guessArr[i]) {
+            hint.push(2);
+          } else if (arr.includes(guessArr[i]) && hint) {
+            hint.push(1);
+          } else {
+            hint.push(0);
+          }
+        }
+        res.status(200).json({ guess: guessArr, hint: hint });
+      } else {
+        res.json({ error: "Invalid token" });
+      }
+    });
 });
 
 router.get("/port", (req, res) => {

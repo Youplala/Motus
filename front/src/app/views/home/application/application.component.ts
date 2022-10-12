@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map } from 'rxjs';
+import { MotusService } from 'src/app/services/motus.service';
 import { RequestService } from 'src/app/services/request.service';
 
 @Component({
@@ -17,12 +18,14 @@ export class ApplicationComponent implements OnInit {
   public loading: boolean = false
 
 
-  constructor(public _request: RequestService) {
+  constructor(public _motusService: MotusService) {
 
   }
 
   ngOnInit() {
-    this._request.get('firstHint').subscribe({next: (data: any) => {
+    this._motusService.getFirstHint().subscribe({
+      next: (data: any) => {
+        console.log(data)
       const word: string[] = data.firstHint
       const code: number[] = data.hint
       const out: Letter[] = []
@@ -43,11 +46,11 @@ export class ApplicationComponent implements OnInit {
 
       this.loading = true
 
-      this._request.get('isWord?guess='+word).subscribe({
+      this._motusService.isWord(word).subscribe({
         next: (data: any) => {
           console.log(data)
           if(data.isWord){
-            this._request.get('guess?guess='+word).subscribe({next: (data: any) => {
+            this._motusService.guess(word).subscribe({next: (data: any) => {
               const word: string[] = data.guess
               const code: number[] = data.hint
               const out: Letter[] = []
@@ -71,9 +74,6 @@ export class ApplicationComponent implements OnInit {
           }
         }
       })
-
-      
-      
     }
   }
 
@@ -90,5 +90,3 @@ class Letter {
     this.code= code;
   }
 }
-
-

@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthService } from './services/auth.service';
 import { RequestService } from './services/request.service';
+import { MotusService } from './services/motus.service';
 
 @NgModule({
   declarations: [
@@ -23,16 +24,13 @@ import { RequestService } from './services/request.service';
   ],
   imports: [
     BrowserModule,
-        HttpClientModule,
-        AppRoutingModule,
+    HttpClientModule,
+    AppRoutingModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    
   ],
-  providers: [
-    AuthService,
-    RequestService],
-  bootstrap: [AppComponent]
+  providers: [AuthService, RequestService, MotusService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

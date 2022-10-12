@@ -1,3 +1,4 @@
-<app-logging *ngIf="!(_authService.tokenIsValid || this.isLogged)"></app-logging>
-<app-home *ngIf="(_authService.tokenIsValid || this.isLogged)"></app-home>
-<p>Token : {{_authService.token}}</p>
+<app-logging
+  *ngIf="!(_authService.tokenIsValid || this.isLogged)"
+></app-logging>
+<app-home *ngIf="_authService.tokenIsValid || this.isLogged"></app-home>
