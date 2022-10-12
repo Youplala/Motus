@@ -34,6 +34,7 @@ export class AuthService {
   }
 
   public isTokenValid(): void {
+    console.log('Check token validity')
     this._requestService.get('auth/checkToken/?token='+this.token).subscribe({
       next: (data: any) => {
         this.isTokenValid = data.valid;
