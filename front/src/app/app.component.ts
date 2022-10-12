@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,9 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public token = localStorage.getItem('motus-token') || '';
 
-  public onLog(event: string) {
-    this.token = event;
+  constructor (public _authService: AuthService) {
   }
 }

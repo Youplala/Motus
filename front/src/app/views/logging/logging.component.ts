@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { RequestService } from 'src/app/services/request.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-logging',
@@ -18,7 +18,7 @@ export class LoggingComponent implements OnInit {
   public loading: boolean = false;
   public submitted: boolean = false;
 
-  constructor(private _requestService: RequestService) {
+  constructor(private _authService: AuthService) {
   }
 
   ngOnInit() {
@@ -27,26 +27,16 @@ export class LoggingComponent implements OnInit {
   get f() { return this.form.controls; }
 
 
-  public onSubmit() {
+  public async onSubmit() {
+    this.loading = true;
     this.submitted = true;
 
     if (this.form.invalid) {
       return;
     }
     console.log(this.form.value)
-    this._requestService.get('auth/login/?username='+this.form.value.username+'&password='+this.form.value.password).subscribe({
-      next: (data: any) => {
-        console.log(data)
-        if (data.auth) {
-          localStorage.setItem('motus-token', data.token);
-          this.emitter.emit(data.token);
-        } else {
-          this.emitter.emit('');
-        }
-      },
-    })
-
-
+    await this._authService.login(this.form.value.username, this.form.value.password);
+    this.loading = false;
   }
 
 

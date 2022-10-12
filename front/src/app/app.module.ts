@@ -11,12 +11,15 @@ import { LoggingComponent } from './views/logging/logging.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { AuthService } from './services/auth.service';
+import { RequestService } from './services/request.service';
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ApplicationComponent,
-    LoggingComponent
+    LoggingComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,7 +30,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    RequestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

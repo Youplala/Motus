@@ -1,2 +1,2 @@
-<app-logging (emitter)="onLog($event)" *ngIf="!(token.length > 0)"></app-logging>
-<app-home *ngIf="(token.length > 0)"></app-home>
+<app-logging *ngIf="!(_authService.tokenIsValid)"></app-logging>
+<app-home *ngIf="(_authService.tokenIsValid)"></app-home>
