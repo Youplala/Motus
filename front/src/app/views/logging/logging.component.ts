@@ -38,6 +38,7 @@ export class LoggingComponent implements OnInit {
       next: (data: any) => {
         console.log(data)
         if (data.auth) {
+          localStorage.setItem('motus-token', data.token);
           this.emitter.emit(data.token);
         } else {
           this.emitter.emit('');
