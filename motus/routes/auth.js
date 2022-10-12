@@ -1,5 +1,6 @@
 const { Client } = require("pg");
 const { uuid } = require("uuidv4");
+var { JWTService } = require("./JWT");
 
 var express = require("express");
 const router = express.Router();
@@ -7,8 +8,18 @@ const router = express.Router();
 const client = new Client();
 client.connect();
 
+function getConfigurations(dataModel) {
+  const configurations = {
+    data: dataModel,
+    secretKey: "secret",
+    expireDate: {
+      expiresIn: "3h",
+    },
+  };
+  return configurations;
+}
+
 router.get("/register", async (req, res) => {
-  const id = uuid();
   const username = req.query.username;
   const password = req.query.password;
   // Check if username already exists
@@ -21,7 +32,7 @@ router.get("/register", async (req, res) => {
   } else {
     await client.query(
       "INSERT INTO auth (id, username, password) VALUES ($1, $2, $3)",
-      [id, username, password]
+      [uuid(), username, password]
     );
     res.status(200).json({ auth: true });
   }
@@ -37,11 +48,16 @@ router.get("/login", async (req, res) => {
   if (existingRows.rows.length == 0) {
     res.status(200).json({ auth: false });
   } else {
-    const token = uuid();
-    await client.query(
-      "INSERT INTO tokens ( id, token, beginning) VALUES ($1, $2, $3)",
-      [existingRows.rows[0].id, token, new Date()]
-    );
+    const model = {
+      id: existingRows.rows[0].id,
+    };
+    const configurations = getConfigurations(model);
+    const jwtService = JWTService(configurations.secretKey);
+    const token = jwtService.generateToken(configurations);
+    await client.query("INSERT INTO tokens ( id, token) VALUES ($1, $2)", [
+      existingRows.rows[0].id,
+      token,
+    ]);
     res.status(200).json({ auth: true, token: token });
   }
 });
@@ -55,15 +71,12 @@ router.get("/checkToken", async (req, res) => {
   if (existingRows.rows.length == 0) {
     res.status(200).json({ valid: false });
   } else {
-    // Check if token is expired
-    const beginning = existingRows.rows[0].beginning;
-    const now = new Date();
-    const diff = now - beginning;
-    const diffHours = diff / 1000 / 60 / 60;
-    if (diffHours > 24) {
+    const jwtService = JWTService("secret");
+    if (!jwtService.isTokenValid(token)) {
       res.status(200).json({ valid: false });
     } else {
-      res.status(200).json({ valid: true });
+      const data = jwtService.getTokenData(token);
+      res.status(200).json({ valid: true, id: data.id });
     }
   }
 });

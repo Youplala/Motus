@@ -1,5 +1,6 @@
 const express = require("express");
 const { Pool, Client } = require("pg");
+const { readFileSync, promises: fsPromises } = require("fs");
 
 const app = express();
 const router = express.Router();
@@ -20,7 +21,7 @@ function syncReadFile(filename) {
 }
 
 function getWordList() {
-  const arr = syncReadFile("../data/liste_francais_utf8.txt");
+  const arr = syncReadFile("data/liste_francais_utf8.txt");
   return arr;
 }
 
@@ -31,12 +32,7 @@ function getWord() {
   return word;
 }
 
-router.get("/auth", async (req, res) => {
-  const a = await client.query("SELECT * from auth");
-  res.json(a.rows);
-});
-
-router.get("/firstHint", (req, res) => {
+function computeFirstHint() {
   const word = getWord();
   const firstHint = word[0];
   const arr = [firstHint];
@@ -46,7 +42,24 @@ router.get("/firstHint", (req, res) => {
     hint.push(0);
   }
   console.log(word);
-  res.status(200).json({ firstHint: arr, hint: hint });
+  return { word, arr, hint };
+}
+
+router.get("/firstHint", (req, res) => {
+  const token = req.query.token;
+  // Request to auth to check if token is valid
+  const auth = "http://localhost:3000/auth/checkToken?token=" + token;
+  fetch(auth)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.valid) {
+        // Token is valid
+        const { word, arr, hint } = computeFirstHint();
+        res.status(200).json({ firstHint: arr, hint: hint });
+      } else {
+        res.json({ error: "Invalid token" });
+      }
+    });
 });
 
 router.get("/isWord", (req, res) => {
@@ -84,12 +97,6 @@ router.get("/port", (req, res) => {
 
 router.get("/path", (req, res) => {
   res.send("Path Motus app listening on " + os.hostname() + " port " + port);
-});
-
-router.get("/anotherpath", (req, res) => {
-  res.send(
-    "AnotherPath Motus app listening on " + os.hostname() + " port " + port
-  );
 });
 
 module.exports = router;
