@@ -76,7 +76,6 @@ router.get("/isWord", (req, res) => {
         const wordList = getWordList();
         const isWord = wordList.includes(guess);
         res.status(200).json({ isWord: isWord });
-        res.status(200).json({ guess: guessArr, hint: hint });
       } else {
         res.json({ error: "Invalid token" });
       }
@@ -101,10 +100,13 @@ router.get("/guess", (req, res) => {
         const arr = word.split("");
         const guessArr = guess.split("");
         const hint = [];
+        const lettersToGuess = word.split("");
         for (let i = 0; i < arr.length; i++) {
           if (arr[i] === guessArr[i]) {
             hint.push(2);
-          } else if (arr.includes(guessArr[i]) && hint) {
+            // Remove current letter from lettersToGuess
+            lettersToGuess.splice(lettersToGuess.indexOf(arr[i]), 1);
+          } else if (lettersToGuess.includes(guessArr[i])) {
             hint.push(1);
           } else {
             hint.push(0);
