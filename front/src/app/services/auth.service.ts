@@ -7,7 +7,7 @@ import { RequestService } from './request.service';
 export class AuthService {
 
   public token = localStorage.getItem('motus-token') || '';
-  public tokenIsValid = false;
+  public tokenIsValid: boolean = false;
 
 
   constructor(private _requestService: RequestService) {
@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   public async login(username: string, password: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       this._requestService.get('auth/login/?username='+username+'&password='+password).subscribe({
         next: (data: any) => {
           if (data.auth) {
@@ -34,12 +34,10 @@ export class AuthService {
   }
 
   public isTokenValid(): void {
-    console.log('Check token validity')
     this._requestService.get('auth/checkToken/?token='+this.token).subscribe({
       next: (data: any) => {
         console.log(data)
-        console.log('Check token validity', data)
-        this.isTokenValid = data.valid;
+        this.tokenIsValid = data.valid;
       }
     });
   }
