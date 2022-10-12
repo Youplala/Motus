@@ -1,2 +1,3 @@
 <app-logging *ngIf="!(_authService.tokenIsValid)"></app-logging>
 <app-home *ngIf="(_authService.tokenIsValid)"></app-home>
+<p>Token : {{_authService.token}}</p>
