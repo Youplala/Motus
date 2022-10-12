@@ -3,6 +3,7 @@ version: "2.1"
 services:
   root_db:
     image: postgres
+    container_name: db
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
@@ -22,24 +23,6 @@ services:
     networks:
       - mynetwork
 
-  nocodb:
-    depends_on:
-      root_db:
-        condition: service_healthy
-    image: nocodb/nocodb:0.96.4
-    container_name: nocodb
-    ports:
-      - "8080:8080"
-    expose:
-      - "8080"
-    restart: always
-    volumes:
-      - nc_data:/usr/app/data
-    environment:
-      NC_DB: "pg://root_db:5432?u=postgres&p=password&d=root_db"
-    networks:
-      - mynetwork
-
   back1:
     build: ./backend
     container_name: back1
@@ -49,14 +32,14 @@ services:
 
   back2:
     build: ./backend
-    container_name: "back2"
+    container_name: back2
     restart: always
     networks:
       - mynetwork
 
   front:
     build: ./frontend
-    container_name: "front"
+    container_name: front
     ports:
       - "4200:4200"
     expose:
@@ -66,7 +49,7 @@ services:
 
   proxy:
     build: ./proxy
-    container_name: "proxy"
+    container_name: proxy
     restart: always
     ports:
       - "80:80"
@@ -75,9 +58,9 @@ services:
     networks:
       - mynetwork
 
-  auth:
+  connector:
     build: ./backend/database
-    container_name: "auth"
+    container_name: connector
     restart: always
     ports:
       - "8000:8000"
