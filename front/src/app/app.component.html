@@ -1,2 +1,2 @@
-<app-logging (emitter)="onLog($event)" *ngIf="!isLogged"></app-logging>
-<app-home *ngIf="isLogged"></app-home>
+<app-logging (emitter)="onLog($event)" *ngIf="!(token.length > 0)"></app-logging>
+<app-home *ngIf="(token.length > 0)"></app-home>

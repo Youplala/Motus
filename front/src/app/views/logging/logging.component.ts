@@ -9,7 +9,7 @@ import { RequestService } from 'src/app/services/request.service';
 })
 export class LoggingComponent implements OnInit {
 
-  @Output() emitter = new EventEmitter<boolean>(); 
+  @Output() emitter = new EventEmitter<string>(); 
 
   public form: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -34,10 +34,14 @@ export class LoggingComponent implements OnInit {
       return;
     }
     console.log(this.form.value)
-    this._requestService.get('auth/?username='+this.form.value.username+'&password='+this.form.value.password).subscribe({
+    this._requestService.get('auth/login/?username='+this.form.value.username+'&password='+this.form.value.password).subscribe({
       next: (data: any) => {
         console.log(data)
-        this.emitter.emit(data.auth)
+        if (data.auth) {
+          this.emitter.emit(data.token);
+        } else {
+          this.emitter.emit('');
+        }
       },
     })
 

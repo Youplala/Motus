@@ -6,9 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  isLogged = false;
+  public token = localStorage.getItem('motus-token') || '';
 
-  public onLog(event: boolean) {
-    this.isLogged = event;
+  public onLog(event: string) {
+    this.token = event;
   }
 }
