@@ -108,6 +108,8 @@ router.get("/guess", (req, res) => {
             lettersToGuess.splice(lettersToGuess.indexOf(arr[i]), 1);
           } else if (lettersToGuess.includes(guessArr[i])) {
             hint.push(1);
+            // Remove current letter from lettersToGuess
+            lettersToGuess.splice(lettersToGuess.indexOf(guessArr[i]), 1);
           } else {
             hint.push(0);
           }

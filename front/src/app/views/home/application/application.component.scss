@@ -1,29 +1,209 @@
+$green: #2ecc71;
+$red: #e74c3c;
+$blue: #3498db;
+$yellow: #f1c40f;
+$purple: #8e44ad;
+$turquoise: #1abc9c;
+
 .line {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.btn {
+  margin: auto;
+  box-sizing: border-box;
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid $red;
+  border-radius: 0.6em;
+  color: $red;
+  cursor: pointer;
+  display: flex;
+  align-self: center;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  padding: 1.2em 2.8em;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+
+  &:hover,
+  &:focus {
+    color: #fff;
+    outline: 0;
+  }
+}
+
+//BUTTON 2
+.second {
+  border-radius: 3em;
+  border-color: $turquoise;
+  color: #fff;
+  background: {
+    image: linear-gradient(
+      to right,
+      transparentize($turquoise, 0.4),
+      transparentize($turquoise, 0.4) 5%,
+      $turquoise 5%,
+      $turquoise 10%,
+      transparentize($turquoise, 0.4) 10%,
+      transparentize($turquoise, 0.4) 15%,
+      $turquoise 15%,
+      $turquoise 20%,
+      transparentize($turquoise, 0.4) 20%,
+      transparentize($turquoise, 0.4) 25%,
+      $turquoise 25%,
+      $turquoise 30%,
+      transparentize($turquoise, 0.4) 30%,
+      transparentize($turquoise, 0.4) 35%,
+      $turquoise 35%,
+      $turquoise 40%,
+      transparentize($turquoise, 0.4) 40%,
+      transparentize($turquoise, 0.4) 45%,
+      $turquoise 45%,
+      $turquoise 50%,
+      transparentize($turquoise, 0.4) 50%,
+      transparentize($turquoise, 0.4) 55%,
+      $turquoise 55%,
+      $turquoise 60%,
+      transparentize($turquoise, 0.4) 60%,
+      transparentize($turquoise, 0.4) 65%,
+      $turquoise 65%,
+      $turquoise 70%,
+      transparentize($turquoise, 0.4) 70%,
+      transparentize($turquoise, 0.4) 75%,
+      $turquoise 75%,
+      $turquoise 80%,
+      transparentize($turquoise, 0.4) 80%,
+      transparentize($turquoise, 0.4) 85%,
+      $turquoise 85%,
+      $turquoise 90%,
+      transparentize($turquoise, 0.4) 90%,
+      transparentize($turquoise, 0.4) 95%,
+      $turquoise 95%,
+      $turquoise 100%
+    );
+    position: 0 0;
+    size: 100%;
+  }
+  transition: background 300ms ease-in-out;
+
+  &:hover {
+    background-position: 100px;
+  }
 }
 
 .char {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    line-height: 1.5rem;
-    height: 50px;
-    width: 50px;
+  font-size: 2rem;
+  font-weight: 500;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #fff;
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  line-height: 1.5rem;
 }
 
 .good {
-    background-color: red;
+  background-color: green;
 }
 
 .bad {
-    background-color: orange;
+  background-color: rgb(255, 196, 87);
 }
 
 .wrong {
-    background-color: grey;
+  background-color: grey;
+}
+.letter {
+  padding: 20px;
+  border-radius: 12px;
+  width: 20px;
+}
+
+.input-group {
+  display: block;
+  margin: auto;
+  width: 300px;
+  max-width: 100%;
+  height: 82px;
+  border: 0;
+  background-color: #ffffff;
+  border-bottom-left-radius: 41px;
+  border-bottom-right-radius: 41px;
+  border-top-left-radius: 41px;
+  border-top-right-radius: 41px;
+  box-shadow: 0 17px 40px 0 rgba(75, 128, 182, 0.07);
+  margin-bottom: 22px;
+  position: relative;
+  font-size: 17px;
+  color: #a7b4c1;
+  transition: opacity 0.2s ease-in-out, filter 0.2s ease-in-out,
+    box-shadow 0.1s ease-in-out;
+}
+
+.input-group:hover {
+  box-shadow: 0 14px 44px 0 rgba(0, 0, 0, 0.077);
+}
+
+.input-group input {
+  position: absolute;
+  border: 0;
+  box-shadow: none;
+  background-color: rgba(255, 255, 255, 0);
+  top: 0;
+  height: 65px;
+  width: 100%;
+  padding: 0 53px;
+  box-sizing: border-box;
+  z-index: 3;
+  display: block;
+  color: #1a6fc4;
+  font-size: 17px;
+  font-family: "Oxygen", sans-serif;
+  transition: top 0.1s ease-in-out;
+}
+
+.input-group input::placeholder {
+  color: rgba(0, 0, 0, 0);
+}
+
+.input-group input:focus,
+.input-group input:not(:placeholder-shown) {
+  top: 17px;
+}
+*:focus {
+  outline: none;
+}
+.input-group label {
+  position: absolute;
+  border: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding: 0 53px;
+  box-sizing: border-box;
+  transition: all 0.1s ease-in-out;
+  cursor: text;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  bottom: 20px;
+  font-size: 13px;
+  opacity: 0.7;
 }

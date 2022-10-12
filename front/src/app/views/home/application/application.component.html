@@ -1,10 +1,45 @@
-<div *ngIf="!this.LoadingPage">
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap"
+  rel="stylesheet"
+/>
+<form>
+  <div *ngIf="!this.LoadingPage">
     <div class="line" *ngFor="let line of this.records">
-        <div class="char" *ngFor="let char of line">
-            <div [ngClass]="{wrong: char.code===0, bad: char.code===1, good: char.code===2}">{{char.letter}}</div>
+      <div class="char" *ngFor="let char of line">
+        <div
+          class="letter"
+          [ngClass]="{
+            wrong: char.code === 0,
+            bad: char.code === 1,
+            good: char.code === 2
+          }"
+        >
+          {{ char.letter }}
         </div>
+      </div>
     </div>
 
-    <input id="name" type="text" [formControl]="formControl">
-    <button *ngIf="!this.loading" (click)="guess()">Send</button>
-</div>
+    <div class="input-group">
+      <input
+        value=""
+        class="form-control"
+        type="text"
+        name="text-1542372332072"
+        id="name"
+        required="required"
+        placeholder="Ihr Name"
+        [formControl]="formControl"
+        #btnFocus [autofocus]="btnFocus.focus()"
+      />
+      <label for="text-1542372332072">Devine le mot du jour</label>
+    </div>
+    <button
+      class="btn second"
+      *ngIf="!this.loading"
+      (click)="guess()"
+      (keyup.enter)="guess()"
+    >
+      Send
+    </button>
+  </div>
+</form>
