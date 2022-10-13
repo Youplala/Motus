@@ -6,6 +6,7 @@ import { RequestService } from './request.service';
   providedIn: 'root',
 })
 export class MotusService {
+  private container = 'localhost';
   constructor(
     private _requestService: RequestService,
     private _authService: AuthService
@@ -14,14 +15,14 @@ export class MotusService {
   public getFirstHint() {
     const token = this._authService.token;
     const path = 'motus/firstHint';
-    return this._requestService.get(path + '/?token=' + token);
+    return this._requestService.get(this.container, path + '/?token=' + token);
   }
 
   public guess(word: string) {
     const token = this._authService.token;
     const path = 'motus/guess';
 
-    return this._requestService.get(
+    return this._requestService.get(this.container,
       path + '/?token=' + token + '&guess=' + word
     );
   }
@@ -29,7 +30,7 @@ export class MotusService {
   public isWord(word: string) {
     const token = this._authService.token;
     const path = 'motus/isWord';
-    return this._requestService.get(
+    return this._requestService.get(this.container,
       path + '/?token=' + token + '&guess=' + word
     );
   }

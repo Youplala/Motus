@@ -1,4 +1,4 @@
-const { Pool, Client } = require("pg");
+const { Client } = require("pg");
 
 var express = require("express");
 router = express.Router();

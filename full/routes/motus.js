@@ -1,7 +1,6 @@
 const express = require("express");
 const { Client } = require("pg");
 const { readFileSync, promises: fsPromises } = require("fs");
-const fetch = require("node-fetch");
 
 const router = express.Router();
 
@@ -50,15 +49,12 @@ function computeFirstHint() {
 }
 
 router.get("/firstHint", (req, res) => {
-  console.log("Coucou 1");
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://auth:3001/auth/checkToken?token=" + token;
-  console.log("Coucou avant fetch");
+  const auth = "http://localhost/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Coucou dans fetch");
       console.log(data);
       if (data.valid) {
         // Token is valid
@@ -73,7 +69,7 @@ router.get("/firstHint", (req, res) => {
 router.get("/isWord", (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://auth:3001/auth/checkToken?token=" + token;
+  const auth = "http://localhost/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then((data) => {
@@ -100,7 +96,7 @@ router.get("/health", (req, res) => {
 router.get("/guess", (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://auth:3001/auth/checkToken?token=" + token;
+  const auth = "http://localhost/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then((data) => {
@@ -129,7 +125,7 @@ router.get("/guess", (req, res) => {
           }
         }
         fetch(
-          "http://score:3002/score/push/?token=" +
+          "http://localhost/score/push/?token=" +
             token +
             "&guess=" +
             guess +

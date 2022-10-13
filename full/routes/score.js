@@ -1,9 +1,5 @@
 const express = require("express");
-const { Pool, Client } = require("pg");
-const { readFileSync, promises: fsPromises } = require("fs");
-const { PassThrough } = require("stream");
-
-const app = express();
+const { Client } = require("pg");
 const router = express.Router();
 
 const client = new Client();
@@ -12,7 +8,7 @@ client.connect();
 router.get("/push", async (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://localhost:3000/auth/checkToken?token=" + token;
+  const auth = "http://localhost/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then(async (data) => {
@@ -46,7 +42,7 @@ router.get("/push", async (req, res) => {
 router.get("/getToday", async (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://localhost:3000/auth/checkToken?token=" + token;
+  const auth = "http://localhost/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then(async (data) => {
@@ -69,7 +65,7 @@ router.get("/getToday", async (req, res) => {
 router.get("/getScore", async (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://localhost:3000/auth/checkToken?token=" + token;
+  const auth = "http://localhost/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then(async (data) => {

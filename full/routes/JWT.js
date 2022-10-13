@@ -1,7 +1,6 @@
 var jwt = require("jsonwebtoken");
 
 function JWTService(secretKey) {
-  var secret = secretKey;
   var methods = {};
 
   function isObjectNullOrUndefined(object) {

@@ -1,0 +1,5 @@
+{
+    "ALLOW_ORIGINS": [
+        "http://localhost:4200"
+    ]
+}

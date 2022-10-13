@@ -1,6 +1,7 @@
 const { Client } = require("pg");
 const { uuid } = require("uuidv4");
 var { JWTService } = require("./JWT");
+const fetch = require("node-fetch");
 
 var express = require("express");
 const router = express.Router();
@@ -35,12 +36,14 @@ router.get("/register", async (req, res) => {
       [uuid(), username, password]
     );
     //redirect to login
-    fetch("http://localhost:3000/auth/login?username=" + username + "&password=" + password)
-      .then((response) => response.json())
-      .then((data) => {
-        res.status(200).json(data);
-      }
-    );
+    fetch(
+      "http://localhost/auth/login?username=" +
+        username +
+        "&password=" +
+        password
+    ).then((data) => {
+      res.status(200).json({ auth: true, token: data.token });
+    });
   }
 });
 

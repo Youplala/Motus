@@ -23,22 +23,41 @@ services:
     networks:
       - mynetwork
 
-  back1:
-    build: ./backend
-    container_name: back1
+  motus:
+    build: ./motus
+    container_name: motus
     restart: always
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
     networks:
       - mynetwork
 
-  back2:
-    build: ./backend
-    container_name: back2
+  auth:
+    build: ./auth
+    container_name: auth
     restart: always
+    ports:
+      - "3001:3001"
+    expose:
+      - "3001"
+    networks:
+      - mynetwork
+
+  score:
+    build: ./score
+    container_name: score
+    restart: always
+    ports:
+      - "3002:3002"
+    expose:
+      - "3002"
     networks:
       - mynetwork
 
   front:
-    build: ./frontend
+    build: ./front
     container_name: front
     ports:
       - "4200:4200"
@@ -58,16 +77,6 @@ services:
     networks:
       - mynetwork
 
-  connector:
-    build: ./backend/database
-    container_name: connector
-    restart: always
-    ports:
-      - "8000:8000"
-    expose:
-      - "8000"
-    networks:
-      - mynetwork
 
 volumes:
   db_data: {}

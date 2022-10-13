@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ScoreService {
+  private container = 'localhost';
+
   constructor(
     public _requestService: RequestService,
     public _authService: AuthService
@@ -15,7 +17,7 @@ export class ScoreService {
   public getRecords() {
     const token = this._authService.token;
     const path = 'score/getToday';
-    return this._requestService.get(path + '/?token=' + token);
+    return this._requestService.get(this.container, path + '/?token=' + token);
   }
   public score:any[] = []
   public moyenne: number = 0
@@ -23,23 +25,24 @@ export class ScoreService {
   public getScore() {
     const token = this._authService.token;
     const path = 'score/getScore';
-    this._requestService.get(path + '/?token=' + token).subscribe({
-      next: (data: any) => {
-        this.score = data;
-      },
-      complete: () => {
-        // Check if the user has played at least one game
-        if (this.score.length > 0) {
-          this.moyenne = 0
-          this.score.forEach((element: any) => {
-            this.moyenne += element.nb_try;
-          });
-          this.moyenne = this.moyenne / this.score.length;
-        } else {
-          this.moyenne = 0;
-        }
-      }
-
-    });
+    this._requestService
+      .get(this.container, path + '/?token=' + token)
+      .subscribe({
+        next: (data: any) => {
+          this.score = data;
+        },
+        complete: () => {
+          // Check if the user has played at least one game
+          if (this.score.length > 0) {
+            this.moyenne = 0;
+            this.score.forEach((element: any) => {
+              this.moyenne += element.nb_try;
+            });
+            this.moyenne = this.moyenne / this.score.length;
+          } else {
+            this.moyenne = 0;
+          }
+        },
+      });
   }
 }

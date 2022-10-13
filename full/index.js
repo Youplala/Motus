@@ -5,7 +5,10 @@ const { readFileSync, promises: fsPromises } = require("fs");
 const app = express();
 const port = process.env.PORT || 3000;
 
+var dbRoutes = require("./routes/database");
 var motusRoutes = require("./routes/motus");
+var authRoutes = require("./routes/auth");
+var scoreRoutes = require("./routes/score");
 
 // Set up CORS
 app.use(cors());
@@ -16,11 +19,10 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get('/motus/', (req, res) => {
-  res.json('Hello World!', port)
-})
-
+app.use("/db", dbRoutes);
 app.use("/motus", motusRoutes);
+app.use("/auth", authRoutes);
+app.use("/score", scoreRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
