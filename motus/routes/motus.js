@@ -16,7 +16,11 @@ function getSeedByDay() {
 
 function syncReadFile(filename) {
   const contents = readFileSync(filename, "utf-8");
-  const arr = contents.split(/\r?\n/);
+  //remove accent and special characters
+  const arr = contents
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .split(/\r?\n/);
   return arr;
 }
 
@@ -72,10 +76,14 @@ router.get("/isWord", (req, res) => {
     .then((data) => {
       console.log(data);
       if (data.valid) {
-        const guess = req.query.guess;
+        const guess = req.query.guess
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase();
         const wordList = getWordList();
         const isWord = wordList.includes(guess);
-        res.status(200).json({ isWord: isWord });
+        const sameLength = guess.length === getWord().length;
+        res.status(200).json({ isWord: isWord, len: sameLength });
       } else {
         res.json({ error: "Invalid token" });
       }
@@ -96,7 +104,10 @@ router.get("/guess", (req, res) => {
       console.log(data);
       if (data.valid) {
         const word = getWord();
-        const guess = req.query.guess;
+        const guess = req.query.guess
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
         const arr = word.split("");
         const guessArr = guess.split("");
         const hint = [];
@@ -114,7 +125,19 @@ router.get("/guess", (req, res) => {
             hint.push(0);
           }
         }
-        res.status(200).json({ guess: guessArr, hint: hint });
+        fetch(
+          "http://localhost:3000/score/push/?token=" +
+            token +
+            "&guess=" +
+            guess +
+            "&hint=" +
+            hint.join("")
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            res.status(200).json({ guess: guessArr, hint: hint });
+          });
       } else {
         res.json({ error: "Invalid token" });
       }

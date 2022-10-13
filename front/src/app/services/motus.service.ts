@@ -20,6 +20,7 @@ export class MotusService {
   public guess(word: string) {
     const token = this._authService.token;
     const path = 'motus/guess';
+
     return this._requestService.get(
       path + '/?token=' + token + '&guess=' + word
     );

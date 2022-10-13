@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { RequestService } from './services/request.service';
 import { MotusService } from './services/motus.service';
+import { ScoreService } from './services/score.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { MotusService } from './services/motus.service';
     AppRoutingModule,
     ReactiveFormsModule,
   ],
-  providers: [AuthService, RequestService, MotusService],
+  providers: [AuthService, RequestService, MotusService, ScoreService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

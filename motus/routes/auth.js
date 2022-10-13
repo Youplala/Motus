@@ -34,7 +34,13 @@ router.get("/register", async (req, res) => {
       "INSERT INTO auth (id, username, password) VALUES ($1, $2, $3)",
       [uuid(), username, password]
     );
-    res.status(200).json({ auth: true });
+    //redirect to login
+    fetch("http://localhost:3000/auth/login?username=" + username + "&password=" + password)
+      .then((response) => response.json())
+      .then((data) => {
+        res.status(200).json(data);
+      }
+    );
   }
 });
 

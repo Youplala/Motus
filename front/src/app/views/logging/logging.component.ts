@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoggingComponent implements OnInit {
 
-  @Output() emitter = new EventEmitter<string>(); 
+  @Output() emitter = new EventEmitter<string>();
 
   public form: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -37,6 +37,16 @@ export class LoggingComponent implements OnInit {
     console.log(this.form.value)
     await this._authService.login(this.form.value.username, this.form.value.password);
     this.loading = false;
+  }
+
+  public async register() {
+  this.loading = true;
+  this.submitted = true;
+  if (this.form.invalid) {
+    return;
+  }
+  await this._authService.register(this.form.value.username, this.form.value.password);
+  this.loading = false;
   }
 
 

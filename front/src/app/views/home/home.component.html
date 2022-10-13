@@ -1,12 +1,28 @@
 <div class="app-container">
     <div class="header">
-        <h1>MOTUSOM</h1>
+        <h1>MOTUSUTOM</h1>
     </div>
     <div class="footer">
-        <p>By Julien ASSUIED & Elie Brosset</p>
+        <p>By Julien ASSUIED & Elie BROSSET</p>
     </div>
-    <div class="left"></div>
-    <div class="right"></div>
+    <div class="left">
+
+    </div>
+    <div class="right">
+        <!-- Display score -->
+        <p class="center">Bonjour {{_authService.name}} 🙃</p>
+        <div class="center">
+            <p class="history_score_title">Nombre moyen d'essais</p>
+            <p class="history_score">{{_scoreService.moyenne}}</p>
+            <button (click)="logout()">Déconnexion</button>
+        </div>
+        <div class="history_line" *ngFor="let i of _scoreService.score">
+            <p>Nombre d'essais: {{ i.nb_try }}</p>
+            <p>Date: {{ i.day | date:'dd/MM/yyyy' }}</p>
+        </div>
+
+
+    </div>
     <div class="content">
         <app-application></app-application>
     </div>

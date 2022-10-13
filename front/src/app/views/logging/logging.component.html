@@ -21,6 +21,7 @@
                   <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                   Login
               </button>
+              <button [disabled]="loading" (click)="register()">Register</button>
             </div>
         </form>
     </div>

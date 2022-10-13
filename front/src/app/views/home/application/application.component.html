@@ -14,32 +14,50 @@
             good: char.code === 2
           }"
         >
-          {{ char.letter }}
+          {{ char.letter.toUpperCase() }}
         </div>
       </div>
     </div>
 
-    <div class="input-group">
+    <div *ngIf="records.length <= 5 && !isValid">
+      <div class="line" *ngFor="let line of indices">
+        <div class="char" *ngFor="let char of line">
+          <div
+            class="letter"
+            [ngClass]="{
+              wrong: char.code === 0,
+              bad: char.code === 1,
+              good: char.code === 2
+            }"
+          >
+            {{ char.letter.toUpperCase() }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-group" *ngIf="this.records.length <= 5 && !isValid">
       <input
         value=""
-        class="form-control"
         type="text"
-        name="text-1542372332072"
         id="name"
         required="required"
         placeholder="Ihr Name"
         [formControl]="formControl"
-        #btnFocus [autofocus]="btnFocus.focus()"
+        #btnFocus
+        [autofocus]="btnFocus.focus()"
       />
-      <label for="text-1542372332072">Devine le mot du jour</label>
+      <label>Devine le mot du jour</label>
     </div>
     <button
       class="btn second"
-      *ngIf="!this.loading"
+      *ngIf="!this.loading && this.records.length <= 5 && !isValid"
       (click)="guess()"
-      (keyup.enter)="guess()"
     >
       Send
     </button>
+
+    <p class="nTry" *ngIf="!isValid">{{ 6 - this.records.length }} Tries Left !</p>
+    <p *ngIf="isValid">Félicitations, Vous avez trouvé le mot en {{this.records.length}} essais ! Revenez Demain pour un nouveau mot ;)</p>
   </div>
 </form>
