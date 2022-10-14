@@ -1,11 +1,36 @@
 # Motusutom
 
 L'objectif de ce projet est de créer une application web utilisant différents micro-services. L'architecture est complexe et permet de mettre en oeuvre plusieurs technologies.
-Motusom est un jeu inspiré du jeu [Motus](https://fr.wikipedia.org/wiki/Motus_(jeu)).
+Motusom est un jeu inspiré du jeu [Motus](<https://fr.wikipedia.org/wiki/Motus_(jeu)>).
+
+La structure du projet est la suivante :
+
+- `motus` : toute la logique métier du jeu Motus (serveur NodeJS + Express)
+- `front` : application web (serveur Angular)
+- `auth` : service d'authentification (serveur NodeJS + Express)
+- `score` : service de gestion des scores (serveur NodeJS + Express)
+- `auth_db` : base de données de l'authentification (serveur PostgreSQL)
+- `score_db` : base de données des scores (serveur PostgreSQL)
+- `proxy` : proxy qui gère les redirections (serveur HAProxy)
+- `monitoring` : service de monitoring (serveur Prometheus + Grafana)
+
+## Prérequis
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+## Étapes de lancement
+
+- Cloner le projet
+- Naviguer dans le dossier du projet
+- `docker-compose up -d`
+- Se rendre sur [http://localhost](http://localhost)
+- Amusez-vous !
 
 # Architecture
 
 L'application est composée de plusieurs Microservices repartis selon le schema suivant:
+
 ```mermaid
 stateDiagram-v2
     [*] --> Proxy
@@ -35,7 +60,6 @@ Le frontend est une application [Angular](https://angular.io/) qui permet la vis
 
 Le service Haproxy permet de faire du load balancing entre les différents services.
 
-
 ## Auth
 
 Le service d'authentification permet de gérer les utilisateurs et les sessions. Il est basé sur [Node.js](https://nodejs.org/en/) et [Express](https://expressjs.com/).
@@ -43,7 +67,6 @@ Le service d'authentification permet de gérer les utilisateurs et les sessions.
 ## Backend
 
 Le service backend est un service [Node.js](https://nodejs.org/en/) qui permet de gérer les parties et les mots.
-
 
 ## Postgres
 
