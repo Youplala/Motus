@@ -24,8 +24,7 @@ stateDiagram-v2
     Node_Exporter --> Prometheus
     Prometheus --> Grafana
     Score --> PGSQL_Score
-
-
+    [*] --> Grafana
 ```
 
 ## Frontend
