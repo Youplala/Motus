@@ -141,12 +141,22 @@ Prometheus est un outil de monitoring open-source qui permet de collecter et d'a
 
 Grafana est un outil de visualisation de données qui permet de créer des tableaux de bord. Il permet de visualiser les métriques collectées par Prometheus.
 
+## Mise en place du monitoring
 
+- Se connecter à Grafana via [http://localhost:3004](http://localhost:3004).
+- Se connecter avec les identifiants suivants :
+  - Identifiant : admin
+  - Mot de passe : admin
+- Ajouter un nouveau data source
+  - Nom : Prometheus
+  - Type : Prometheus
+  - URL : http://prometheus:9090
+- Créer un nouveau tableau de bord
+- Choisir le data source Prometheus
+- Choisir une métrique
+- Un graphique est créé, il est possible de le modifier en ajoutant des métriques, des filtres, etc.
 
-
-
-
-
+![Grafana](prometheus.png)
 
 # Requêtes Api
 ```mermaid
