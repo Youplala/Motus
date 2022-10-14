@@ -119,7 +119,7 @@ services:
     image: prom/prometheus
     container_name: prometheus
     volumes:
-      - ./prometheus/:/etc/prometheus/
+      - ./monitoring/:/etc/prometheus/
     restart: unless-stopped
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
