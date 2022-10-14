@@ -12,3 +12,5 @@ CREATE TABLE IF NOT EXISTS guess (
     day timestamp NOT NULL,
     indice VARCHAR(30) NOT NULL
 );
+
+\c motus_database

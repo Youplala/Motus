@@ -63,30 +63,18 @@ router.get("/login", async (req, res) => {
     const configurations = getConfigurations(model);
     const jwtService = JWTService(configurations.secretKey);
     const token = jwtService.generateToken(configurations);
-    await client.query("INSERT INTO tokens ( id, token) VALUES ($1, $2)", [
-      existingRows.rows[0].id,
-      token,
-    ]);
     res.status(200).json({ auth: true, token: token });
   }
 });
 
 router.get("/checkToken", async (req, res) => {
   const token = req.query.token;
-  const existingRows = await client.query(
-    "SELECT * from tokens WHERE token = $1",
-    [token]
-  );
-  if (existingRows.rows.length == 0) {
+  const jwtService = JWTService("secret");
+  if (!jwtService.isTokenValid(token)) {
     res.status(200).json({ valid: false });
   } else {
-    const jwtService = JWTService("secret");
-    if (!jwtService.isTokenValid(token)) {
-      res.status(200).json({ valid: false });
-    } else {
-      const data = jwtService.getTokenData(token);
-      res.status(200).json({ valid: true, id: data.id });
-    }
+    const data = jwtService.getTokenData(token);
+    res.status(200).json({ valid: true, id: data.id });
   }
 });
 

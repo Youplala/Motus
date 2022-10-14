@@ -1,21 +1,19 @@
 version: "2.1"
 
 services:
-  root_db:
+  database:
     image: postgres
     container_name: db
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./db/init_db.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
     expose:
       - "5432"
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: postgres
-      POSTGRES_DB: root_db
+    env_file:
+      - .env
     healthcheck:
       test: pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
       interval: 10s
@@ -28,6 +26,8 @@ services:
     build: ./motus
     container_name: motus
     restart: always
+    env_file:
+      - .env
     ports:
       - "3000:3000"
     expose:
@@ -39,6 +39,8 @@ services:
     build: ./auth
     container_name: auth
     restart: always
+    env_file:
+      - .env
     ports:
       - "3001:3001"
     expose:
@@ -50,6 +52,8 @@ services:
     build: ./score
     container_name: score
     restart: always
+    env_file:
+      - .env
     ports:
       - "3002:3002"
     expose:
