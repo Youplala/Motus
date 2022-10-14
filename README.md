@@ -1,5 +1,7 @@
 # Motusom
 
+![Motusom](motus.png)
+
 Motusom est un jeu inspiré du jeu [Motus](<https://fr.wikipedia.org/wiki/Motus_(jeu)>).
 
 L'objectif de ce projet est de créer une application web mettant en oeuvre différents micro-services indépendants, connecter ces micro-services entre eux et les rendre interopérables.
@@ -207,7 +209,8 @@ S -->>- F: Daily Score
 ```
 # Pistes D'amélioration
 
-[] Utiliser une API pour la gestion des listes de mots.
-[] Utiliser oAuth2 pour la gestion des utilisateurs.
-[] Améliorer le monitoring via Loki.
-[x] Séparer les bases de données Auth et Score
+- [ ] Utiliser une API pour la gestion des listes de mots.
+- [ ] Utiliser oAuth2 pour la gestion des utilisateurs.
+- [ ] Améliorer le monitoring via Loki.
+- [x] Améliorer le monitoring via Prometheus.
+- [x] Séparer les bases de données Auth et Score

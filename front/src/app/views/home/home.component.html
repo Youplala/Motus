@@ -1,6 +1,6 @@
 <div class="app-container">
     <div class="header">
-        <h1>MOTUSUTOM</h1>
+        <h1>MOTUSOM</h1>
     </div>
     <div class="footer">
         <p>By Julien ASSUIED & Elie BROSSET</p>
@@ -16,6 +16,7 @@
             <p class="history_score">{{_scoreService.moyenne}}</p>
             <button (click)="logout()">Déconnexion</button>
         </div>
+        <h3 class="center">Historique de jeu</h3>
         <div class="history_line" *ngFor="let i of _scoreService.score">
             <p>Nombre d'essais: {{ i.nb_try }}</p>
             <p>Date: {{ i.day | date:'dd/MM/yyyy' }}</p>
