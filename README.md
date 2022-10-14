@@ -135,11 +135,12 @@ Si le mot est trouvé, l'application va enregistrer le score et afficher le scor
 
 Le monitoring est réalisé avec [Prometheus](https://prometheus.io/) et [Grafana](https://grafana.com/).
 
-Pour y accéder, se rendre sur [http://localhost:3100](http://localhost:3100).
+Pour y accéder, se rendre sur [http://localhost:3004](http://localhost:3004).
 
 Prometheus est un outil de monitoring open-source qui permet de collecter et d'analyser des métriques. Il est composé d'un serveur qui collecte les métriques et d'un client qui les envoie au serveur.
 
 Grafana est un outil de visualisation de données qui permet de créer des tableaux de bord. Il permet de visualiser les métriques collectées par Prometheus.
+
 
 
 
@@ -209,8 +210,8 @@ S -->>- F: Daily Score
 ```
 # Pistes D'amélioration
 
-- [ ] Utiliser une API pour la gestion des listes de mots.
-- [ ] Utiliser oAuth2 pour la gestion des utilisateurs.
-- [ ] Améliorer le monitoring via Loki.
 - [x] Améliorer le monitoring via Prometheus.
 - [x] Séparer les bases de données Auth et Score
+- [ ] Utiliser une API pour la gestion des listes de mots.
+- [ ] Utiliser oAuth2 pour l'authentification.
+- [ ] Améliorer le monitoring de logs via Loki.
