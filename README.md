@@ -1,4 +1,4 @@
-# Motusom
+# Motusutom
 
 L'objectif de ce projet est de créer une application web utilisant différents micro-services. L'architecture est complexe et permet de mettre en oeuvre plusieurs technologies.
 Motusom est un jeu inspiré du jeu [Motus](https://fr.wikipedia.org/wiki/Motus_(jeu)).
@@ -6,7 +6,27 @@ Motusom est un jeu inspiré du jeu [Motus](https://fr.wikipedia.org/wiki/Motus_(
 # Architecture
 
 L'application est composée de plusieurs Microservices repartis selon le schema suivant:
-![Architecture](img.png)
+```mermaid
+stateDiagram-v2
+    [*] --> Proxy
+    Proxy --> Front
+    Proxy --> Score
+    Proxy --> Motus
+    Proxy --> Auth
+    Front --> Proxy
+    Motus --> Proxy
+    Score --> Proxy
+    Auth --> Proxy
+    Auth --> PGSQL_Auth
+    Motus --> Node_Exporter
+    Score --> Node_Exporter
+    Auth --> Node_Exporter
+    Node_Exporter --> Prometheus
+    Prometheus --> Grafana
+    Score --> PGSQL_Score
+
+
+```
 
 ## Frontend
 
@@ -25,9 +45,6 @@ Le service d'authentification permet de gérer les utilisateurs et les sessions.
 
 Le service backend est un service [Node.js](https://nodejs.org/en/) qui permet de gérer les parties et les mots.
 
-## NocoDB
-
-NocoDB est un service qui permet de visualiser la base de données.
 
 ## Postgres
 
