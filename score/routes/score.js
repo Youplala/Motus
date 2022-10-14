@@ -9,7 +9,7 @@ client.connect();
 router.get("/push", async (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://auth:3001/auth/checkToken?token=" + token;
+  const auth = "http://proxy/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then(async (data) => {
@@ -43,7 +43,7 @@ router.get("/push", async (req, res) => {
 router.get("/getToday", async (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://auth:3001/auth/checkToken?token=" + token;
+  const auth = "http://proxy/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then(async (data) => {
@@ -66,7 +66,7 @@ router.get("/getToday", async (req, res) => {
 router.get("/getScore", async (req, res) => {
   const token = req.query.token;
   // Request to auth to check if token is valid
-  const auth = "http://auth:3001/auth/checkToken?token=" + token;
+  const auth = "http://proxy/auth/checkToken?token=" + token;
   fetch(auth)
     .then((response) => response.json())
     .then(async (data) => {
@@ -82,6 +82,5 @@ router.get("/getScore", async (req, res) => {
       }
     });
 });
-
 
 module.exports = router;

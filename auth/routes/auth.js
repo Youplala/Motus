@@ -9,6 +9,20 @@ const router = express.Router();
 const client = new Client();
 client.connect();
 
+const loki_uri = process.env.LOKI || "http://127.0.0.1:3100";
+
+const { createLogger, transports } = require("winston");
+const LokiTransport = require("winston-loki");
+const options = {
+  transports: [
+    new LokiTransport({
+      host: loki_uri,
+    }),
+  ],
+};
+
+const logger = createLogger(options);
+
 function getConfigurations(dataModel) {
   const configurations = {
     data: dataModel,
@@ -21,6 +35,11 @@ function getConfigurations(dataModel) {
 }
 
 router.get("/register", async (req, res) => {
+  logger.info({
+    message: "URL " + req.url,
+    labels: { url: req.url, user: req.query.username },
+  });
+
   const username = req.query.username;
   const password = req.query.password;
   // Check if username already exists
@@ -35,15 +54,7 @@ router.get("/register", async (req, res) => {
       "INSERT INTO auth (id, username, password) VALUES ($1, $2, $3)",
       [uuid(), username, password]
     );
-    //redirect to login
-    fetch(
-      "http://localhost/auth/login?username=" +
-        username +
-        "&password=" +
-        password
-    ).then((data) => {
-      res.status(200).json({ auth: true, token: data.token });
-    });
+    res.status(200).json({ auth: true });
   }
 });
 

@@ -18,6 +18,8 @@
     "nocodb-sdk": "^0.97.0",
     "node-fetch": "^2.6.7",
     "pg": "^8.8.0",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "winston": "^3.8.2",
+    "winston-loki": "^6.0.6"
   }
 }

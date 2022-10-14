@@ -1,19 +1,32 @@
 version: "2.1"
 
 services:
-  database:
+  auth_db:
     image: postgres
-    container_name: db
+    container_name: auth_db
     restart: always
     volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-    expose:
-      - "5432"
-    ports:
-      - "5432:5432"
+      - auth_data:/var/lib/postgresql/data
+      - ./auth_db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
     env_file:
-      - .env
+      - ./auth_db/.env
+    healthcheck:
+      test: pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 10s
+      timeout: 2s
+      retries: 10
+    networks:
+      - mynetwork
+
+  score_db:
+    image: postgres
+    container_name: score_db
+    restart: always
+    volumes:
+      - score_data:/var/lib/postgresql/data
+      - ./score_db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    env_file:
+      - ./score_db/.env
     healthcheck:
       test: pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
       interval: 10s
@@ -26,8 +39,6 @@ services:
     build: ./motus
     container_name: motus
     restart: always
-    env_file:
-      - .env
     ports:
       - "3000:3000"
     expose:
@@ -40,7 +51,7 @@ services:
     container_name: auth
     restart: always
     env_file:
-      - .env
+      - ./auth/.env
     ports:
       - "3001:3001"
     expose:
@@ -53,7 +64,7 @@ services:
     container_name: score
     restart: always
     env_file:
-      - .env
+      - ./score/.env
     ports:
       - "3002:3002"
     expose:
@@ -82,10 +93,66 @@ services:
     networks:
       - mynetwork
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3004:3000"
+    expose:
+      - "3004"
+    restart: unless-stopped
+    networks:
+      - mynetwork
+
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    expose:
+      - "3100"
+    restart: unless-stopped
+    networks:
+      - mynetwork
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    networks:
+      - mynetwork
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    expose:
+      - 9100
+    ports:
+      - 9100:9100
+    networks:
+      - mynetwork
 
 volumes:
-  db_data: {}
-  nc_data: {}
+  auth_data: {}
+  score_data: {}
 
 networks:
   mynetwork:

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RequestService } from './request.service';
+import { SHA256 } from 'crypto-js';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class AuthService {
       this._requestService
         .get(
           this.container,
-          'auth/login/?username=' + username + '&password=' + password
+          'auth/login/?username=' + username + '&password=' + SHA256(password)
         )
         .subscribe({
           next: (data: any) => {
@@ -47,19 +48,18 @@ export class AuthService {
       this._requestService
         .get(
           this.container,
-          'auth/register/?username=' + username + '&password=' + password
+          'auth/register/?username=' +
+            username +
+            '&password=' +
+            SHA256(password)
         )
         .subscribe({
           next: (data: any) => {
             console.log('register', data);
             if (data.auth) {
-              localStorage.setItem('motus-name', username);
-              this.name = username;
-              localStorage.setItem('motus-token', data.token);
-              console.log('token', data);
-              this.token = data.token;
-              this.tokenIsValid = true;
-              resolve(true);
+              this.login(username, password).then((res) => {
+                resolve(true)
+              });
             } else {
               resolve(false);
             }
