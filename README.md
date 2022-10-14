@@ -129,6 +129,17 @@ L'application va verifier que le mot proposé est bien un mot français et qu'il
 Si le mot est valide, l'application va envoyer le mot au serveur Motus qui lui renverra un indice.
 Si le mot est trouvé, l'application va enregistrer le score et afficher le score du joueur, sinon elle affichera le nombre d'essais restants.
 
+# Monitoring
+
+Le monitoring est réalisé avec [Prometheus](https://prometheus.io/) et [Grafana](https://grafana.com/).
+
+Pour y accéder, se rendre sur [http://localhost:3100](http://localhost:3100).
+
+Prometheus est un outil de monitoring open-source qui permet de collecter et d'analyser des métriques. Il est composé d'un serveur qui collecte les métriques et d'un client qui les envoie au serveur.
+
+Grafana est un outil de visualisation de données qui permet de créer des tableaux de bord. Il permet de visualiser les métriques collectées par Prometheus.
+
+
 
 
 
@@ -194,3 +205,9 @@ S ->>+DBS: Id
 DBS -->>- S: Daily Score
 S -->>- F: Daily Score
 ```
+# Pistes D'amélioration
+
+[] Utiliser une API pour la gestion des listes de mots.
+[] Utiliser oAuth2 pour la gestion des utilisateurs.
+[] Améliorer le monitoring via Loki.
+[x] Séparer les bases de données Auth et Score
