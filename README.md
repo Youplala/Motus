@@ -78,7 +78,7 @@ Le frontend est une application qui utilise le framework [Angular](https://angul
 
 ## Proxy
 
-Le service Haproxy permet de faire du load balancing entre les différents services.
+Le service Haproxy permet dispacher les requêtes entre les différents services.
 
 ## Authentification
 
@@ -110,6 +110,31 @@ La table Auth est composée des colonnes suivantes:
 - `username` : nom d'utilisateur
 - `password` : mot de passe hashé
 
+# Chemin Utilisateur
+
+## Connexion
+Afin de se connecter, l'utilisateur doit entrer son nom d'utilisateur et son mot de passe. Si les informations sont correctes, un token est généré et stocké dans le localStorage du navigateur. Ce token est utilisé pour vérifier l'identité de l'utilisateur lors de ses requêtes.
+
+## Mise en place d'une partie (Non utilisateur)
+Afin de mettre en place le jeu, l'application va aller chercher l'indice du mot du jour.
+
+L'application va ensuite rechercher les essais de l'utilisateur pour ce mot. Si l'utilisateur n'a pas encore joué, il n'y aura pas d'essais.
+
+Enfin, l'application va rechercher les scores du joueur pour toutes les parties jouées.
+
+## Jeu
+
+L'utilisateur doit proposer un mot.
+L'application va verifier que le mot proposé est bien un mot français et qu'il a la bonne taille.
+Si le mot est valide, l'application va envoyer le mot au serveur Motus qui lui renverra un indice.
+Si le mot est trouvé, l'application va enregistrer le score et afficher le score du joueur, sinon elle affichera le nombre d'essais restants.
+
+
+
+
+
+
+# Requêtes Api
 ```mermaid
 sequenceDiagram;
     participant F as Frontend;
