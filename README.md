@@ -1,7 +1,12 @@
-# Motusutom
+# Motusom
 
-L'objectif de ce projet est de créer une application web utilisant différents micro-services. L'architecture est complexe et permet de mettre en oeuvre plusieurs technologies.
 Motusom est un jeu inspiré du jeu [Motus](<https://fr.wikipedia.org/wiki/Motus_(jeu)>).
+
+L'objectif de ce projet est de créer une application web mettant en oeuvre différents micro-services indépendants, connecter ces micro-services entre eux et les rendre interopérables.
+
+Le fichier docker-compose.yml permet de lancer l'ensemble des micro-services en une seule commande.
+
+## Structure du projet
 
 La structure du projet est la suivante :
 
@@ -21,11 +26,26 @@ La structure du projet est la suivante :
 
 ## Étapes de lancement
 
-- Cloner le projet
-- Naviguer dans le dossier du projet
-- `docker-compose up -d`
-- Se rendre sur [http://localhost](http://localhost)
-- Amusez-vous !
+1. Cloner le projet
+
+```bash
+git clone https://github.com/Youplala/Motus.git
+```
+
+2. Naviguer dans le dossier du projet
+
+```bash
+cd Motus
+```
+
+3. Lancer les conteneurs
+
+```bash
+docker-compose up -d
+```
+
+4. Se rendre sur [http://localhost](http://localhost)
+5. Amusez-vous !
 
 # Architecture
 
@@ -52,44 +72,100 @@ stateDiagram-v2
     [*] --> Grafana
 ```
 
-## Frontend
+## Front
 
-Le frontend est une application [Angular](https://angular.io/) qui permet la visualisation coté Client.
+Le frontend est une application qui utilise le framework [Angular](https://angular.io/). Il est composé d'une page de connexion et d'une page de jeu.
 
-## Haproxy
+## Proxy
 
 Le service Haproxy permet de faire du load balancing entre les différents services.
 
-## Auth
+## Authentification
 
 Le service d'authentification permet de gérer les utilisateurs et les sessions. Il est basé sur [Node.js](https://nodejs.org/en/) et [Express](https://expressjs.com/).
+Il utilise une base de données [PostgreSQL](https://www.postgresql.org/) pour stocker les noms d'utilisateur et leur mot de passe hashé.
 
-## Backend
+À chaque nouvelle connexion, un JWT (JSON Web Token) est généré. Ce token est utilisé pour vérifier l'identité de l'utilisateur lors de ses requêtes.
+Ce token a une durée de vie de 1 heure. Au bout de cette durée, l'utilisateur doit se reconnecter. Le token est stocké dans le localStorage du navigateur.
+Cela peut poser des problèmes de sécurité car une personne malveillante peut récupérer le token et l'utiliser pour usurper l'identité de l'utilisateur.
+Cependant, le token est signé avec une clé secrète qui n'est pas stockée sur le serveur. Cela permet de s'assurer que le token n'a pas été modifié.
 
-Le service backend est un service [Node.js](https://nodejs.org/en/) qui permet de gérer les parties et les mots.
+## Bases de données
 
-## Postgres
+### Score
 
-Postgres est la base de données utilisée par l'application.
+La table Score est composée des colonnes suivantes:
+
+- `id` : identifiant unique de l'utilisateur
+- `guess` : mot proposé par l'utilisateur
+- `nb_try` : compteur du nombre d'essais
+- `day` : date de la partie
+- `ìndice` : indice donné par le serveur
+
+### Authentification
+
+La table Auth est composée des colonnes suivantes:
+
+- `id` : identifiant unique de l'utilisateur
+- `username` : nom d'utilisateur
+- `password` : mot de passe hashé
 
 ```mermaid
 sequenceDiagram;
-    Frontend ->>+ Authentication: Credentials;
-    Authentication -->>+ Frontend: Token;
-    Frontend ->>+ Backend: firstHint;
-    Backend -->>+ Frontend: Hint;
-    loop For Each Try;
-        Frontend ->>+ Backend: Try (Word);
-        Backend ->>+ NocoDB: Add Try to User;
-        NocoDB ->>+ Postgres: Save Data;
-        Postgres -->>+ NocoDB: Data Saved;
-        NocoDB -->>+ Backend: Data Saved;
-        Backend -->>+ Frontend: Hints;
-    end;
-    Frontend ->>+ Backend: Answer;
-    Backend ->>+ NocoDB: Add Score to User;
-    NocoDB ->>+ Postgres: Save Data;
-    Postgres -->>+ NocoDB: Data Saved;
-    NocoDB -->>+ Backend: Data Saved;
-    Backend -->>+ Frontend: Congrats;
+    participant F as Frontend;
+    participant A as Auth;
+    participant DBA as PSQL Auth;
+    participant M as Motus;
+    participant S as Score;
+    participant DBS as PSQL Score;
+    Note left of F: Register
+    F ->>+ A: Uname Pwd
+    A ->>+ DBA: Uname Pwd Id
+    DBA -->>- A: Ok - Nok
+    A -->>- F: Ok - Nok
+    Note left of F: Login
+    F ->>+ A: Uname
+    A ->>+ DBA: Uname Pwd
+    DBA -->>- A: Id
+    A -->>- F: JWT Token
+
+    Note left of F: FirstIndice
+    F ->>+ M: Token
+    M ->>+A: Token
+    A-->>-M: Id / Token-Not-Valid
+    M -->>- F: Indice
+
+
+Note left of F: IsWord
+F ->>+ M: Word, Token
+M ->>+A: Token
+A-->>-M: Id / Token-Not-Valid
+M -->>- F: Is Word: T/F & Is Same Length T/F
+Note left of F: Guess
+F ->>+ M: Word, Token
+M ->>+A: Token
+A -->>-M: Id / Token-Not-Valid
+M ->>+S: Id Word Score
+S ->>+A: Token
+A -->>-S: Id / Token-Not-Valid
+S ->>+ DBS: Id Word Score Date
+DBS -->>- S: Ok - Nok
+S -->>-M: Ok - Nok
+M -->>-F: Score
+
+#### Score
+Note left of F: Get Today
+F ->>+ S: Token
+S ->>+A: Token
+A -->>-S: Id / Token-Not-Valid
+S ->>+DBS: Id
+DBS -->>- S: Today Guesses
+S -->>- F: Today Guesses
+Note left of F: Get Score
+F ->>+ S: Token
+S ->>+A: Token
+A -->>-S: Id / Token-Not-Valid
+S ->>+DBS: Id
+DBS -->>- S: Daily Score
+S -->>- F: Daily Score
 ```
